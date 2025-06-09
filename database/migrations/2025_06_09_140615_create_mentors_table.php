@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('peserta', function (Blueprint $table) {
-            $table->id('id_peserta');
-            $table->integer('id_user')->nullable();
+        Schema::create('tb_mentor', function (Blueprint $table) {
+            $table->id('id_mentor');
+            $table->integer('id_users')->nullable();
             $table->integer('id_unit_kerja')->nullable();
-            $table->integer('id_mentor')->nullable();
-            $table->string('nama_peserta')->nullable();
+            $table->string('nama_mentor')->nullable();
+            $table->string('jabatan_mentor')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('peserta');
+        Schema::dropIfExists('tb_mentor');
     }
 };

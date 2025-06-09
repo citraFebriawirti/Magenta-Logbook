@@ -1,0 +1,39 @@
+### Get All Unit Kerja
+GET http://localhost:8000/api/mentor/getAll
+Accept: application/json
+
+###
+GET http://localhost:8000/api/unit_kerja/getAll
+Accept: application/json
+
+### Store Unit Kerja
+POST http://localhost:8000/api/unit_kerja/store
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nama_unit_kerja": "Test Doang"
+}
+
+###
+
+### Edit Unit Kerja (Ganti :id sesuai data yang ada)
+GET http://localhost:8000/api/unit_kerja/edit/1
+Accept: application/json
+
+###
+
+### Update Unit Kerja (Ganti :id sesuai data yang ada)
+PUT http://localhost:8000/api/unit_kerja/update/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nama_unit_kerja": "Teknologi Informasi & Komunikasi"
+}
+
+###
+
+### Delete Unit Kerja (Ganti :id sesuai data yang ada)
+DELETE http://localhost:8000/api/unit_kerja/delete/1
+Accept: application/json

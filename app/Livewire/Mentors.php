@@ -2,30 +2,43 @@
 
 namespace App\Livewire;
 
-use App\Models\UnitKerja as UnitKerjaModel;
 use Livewire\Component;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Validator;
 use Livewire\WithPagination;
+use App\Models\Mentor;
+use App\Models\UnitKerjaModel;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 
-class UnitKerja extends Component
+class Mentors extends Component
 {
-
     use WithPagination;
-    public $nama_unit_kerja = '';
-    public $unit_kerjas;
+
+    public $nama_mentor = '';
+    public $jabatan_mentor = '';
+    public $id_users = null;
+    public $id_unit_kerja = null;
+    public $mentors;
     public $edit_id = null;
     public $is_edit_mode = false;
 
     protected $rules = [
-        'nama_unit_kerja' => 'required|string|max:255',
+        'nama_mentor' => 'required|string|max:255',
+        'jabatan_mentor' => 'required|string|max:255',
+        'id_users' => 'nullable|exists:users,id',
+        'id_unit_kerja' => 'nullable|exists:tb_unit_kerja,id_unit_kerja',
     ];
 
     protected $messages = [
-        'nama_unit_kerja.required' => 'Nama unit kerja wajib diisi.',
-        'nama_unit_kerja.string' => 'Nama unit kerja harus berupa teks.',
-        'nama_unit_kerja.max' => 'Nama unit kerja tidak boleh lebih dari 255 karakter.',
+        'nama_mentor.required' => 'Nama mentor wajib diisi.',
+        'nama_mentor.string' => 'Nama mentor harus berupa teks.',
+        'nama_mentor.max' => 'Nama mentor tidak boleh lebih dari 255 karakter.',
+        'jabatan_mentor.required' => 'Jabatan mentor wajib diisi.',
+        'jabatan_mentor.string' => 'Jabatan mentor harus berupa teks.',
+        'jabatan_mentor.max' => 'Jabatan mentor tidak boleh lebih dari 255 karakter.',
+        'id_users.exists' => 'Pengguna yang dipilih tidak valid.',
+        'id_unit_kerja.exists' => 'Unit kerja yang dipilih tidak valid.',
     ];
 
     public function mount()
@@ -35,8 +48,8 @@ class UnitKerja extends Component
 
     public function loadData()
     {
-        $this->unit_kerjas = UnitKerjaModel::where('deleted_at', null)
-            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
+        $this->mentors = Mentor::where('deleted_at', null)
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 
@@ -45,14 +58,17 @@ class UnitKerja extends Component
         try {
             $this->validate();
 
-            UnitKerjaModel::create([
-                'nama_unit_kerja' => $this->nama_unit_kerja,
+            Mentor::create([
+                'nama_mentor' => $this->nama_mentor,
+                'jabatan_mentor' => $this->jabatan_mentor,
+                'id_users' => $this->id_users,
+                'id_unit_kerja' => $this->id_unit_kerja,
                 'created_at' => now(),
             ]);
 
             $this->dispatch('showAlert', [
                 'type' => 'success',
-                'message' => 'Data berhasil disimpan!'
+                'message' => 'Data mentor berhasil disimpan!'
             ]);
             $this->resetForm();
             $this->loadData();
@@ -60,7 +76,7 @@ class UnitKerja extends Component
         } catch (ValidationException $e) {
             $this->dispatch('showAlert', [
                 'type' => 'error',
-                'message' => $e->errors()['nama_unit_kerja'][0]
+                'message' => $e->errors()['nama_mentor'][0] ?? $e->errors()['jabatan_mentor'][0] ?? 'Validasi gagal.'
             ]);
         } catch (\Throwable $th) {
             $this->dispatch('showAlert', [
@@ -74,19 +90,25 @@ class UnitKerja extends Component
     {
         try {
             $validated = $this->validateRequest($request, [
-                'nama_unit_kerja' => 'required|string|max:255',
+                'nama_mentor' => 'required|string|max:255',
+                'jabatan_mentor' => 'required|string|max:255',
+                'id_users' => 'nullable|exists:users,id',
+                'id_unit_kerja' => 'nullable|exists:tb_unit_kerja,id_unit_kerja',
             ]);
 
-            $unit_kerja = UnitKerjaModel::create([
-                'nama_unit_kerja' => $validated['nama_unit_kerja'],
+            $mentor = Mentor::create([
+                'nama_mentor' => $validated['nama_mentor'],
+                'jabatan_mentor' => $validated['jabatan_mentor'],
+                'id_users' => $validated['id_users'] ?? null,
+                'id_unit_kerja' => $validated['id_unit_kerja'] ?? null,
                 'created_at' => now(),
             ]);
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Data berhasil disimpan',
+                'message' => 'Data mentor berhasil disimpan',
                 'errors' => [],
-                'data' => $unit_kerja,
+                'data' => $mentor,
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -107,10 +129,10 @@ class UnitKerja extends Component
     public function apiGetAll()
     {
         try {
-            $data = UnitKerjaModel::where('deleted_at', null)->get();
+            $data = Mentor::where('deleted_at', null)->get();
             return response()->json([
                 'status' => 200,
-                'message' => 'Data berhasil diambil',
+                'message' => 'Data mentor berhasil diambil',
                 'errors' => [],
                 'data' => $data,
             ]);
@@ -127,10 +149,10 @@ class UnitKerja extends Component
     public function apiGetById($id)
     {
         try {
-            $data = UnitKerjaModel::findOrFail($id);
+            $data = Mentor::findOrFail($id);
             return response()->json([
                 'status' => 200,
-                'message' => 'Data berhasil diambil',
+                'message' => 'Data mentor berhasil diambil',
                 'errors' => [],
                 'data' => $data,
             ]);
@@ -148,17 +170,23 @@ class UnitKerja extends Component
     {
         try {
             $validated = $this->validateRequest($request, [
-                'nama_unit_kerja' => 'required|string|max:255',
+                'nama_mentor' => 'required|string|max:255',
+                'jabatan_mentor' => 'required|string|max:255',
+                'id_users' => 'nullable|exists:users,id',
+                'id_unit_kerja' => 'nullable|exists:tb_unit_kerja,id_unit_kerja',
             ]);
 
-            UnitKerjaModel::where('id_unit_kerja', $id)->update([
-                'nama_unit_kerja' => $validated['nama_unit_kerja'],
+            Mentor::where('id_mentor', $id)->update([
+                'nama_mentor' => $validated['nama_mentor'],
+                'jabatan_mentor' => $validated['jabatan_mentor'],
+                'id_users' => $validated['id_users'] ?? null,
+                'id_unit_kerja' => $validated['id_unit_kerja'] ?? null,
                 'updated_at' => now(),
             ]);
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Data berhasil diupdate',
+                'message' => 'Data mentor berhasil diupdate',
                 'errors' => [],
                 'data' => $request->all(),
             ]);
@@ -181,10 +209,10 @@ class UnitKerja extends Component
     public function apiDelete($id)
     {
         try {
-            UnitKerjaModel::where('id_unit_kerja', $id)->update(['deleted_at' => now()]);
+            Mentor::where('id_mentor', $id)->update(['deleted_at' => now()]);
             return response()->json([
                 'status' => 200,
-                'message' => 'Data berhasil dihapus',
+                'message' => 'Data mentor berhasil dihapus',
                 'errors' => [],
                 'data' => [],
             ]);
@@ -201,8 +229,11 @@ class UnitKerja extends Component
     public function edit($id)
     {
         try {
-            $unit_kerja = UnitKerjaModel::findOrFail($id);
-            $this->nama_unit_kerja = $unit_kerja->nama_unit_kerja;
+            $mentor = Mentor::findOrFail($id);
+            $this->nama_mentor = $mentor->nama_mentor;
+            $this->jabatan_mentor = $mentor->jabatan_mentor;
+            $this->id_users = $mentor->id_users;
+            $this->id_unit_kerja = $mentor->id_unit_kerja;
             $this->edit_id = $id;
             $this->is_edit_mode = true;
         } catch (\Throwable $th) {
@@ -215,14 +246,17 @@ class UnitKerja extends Component
         try {
             $this->validate();
 
-            UnitKerjaModel::where('id_unit_kerja', $this->edit_id)->update([
-                'nama_unit_kerja' => $this->nama_unit_kerja,
+            Mentor::where('id_mentor', $this->edit_id)->update([
+                'nama_mentor' => $this->nama_mentor,
+                'jabatan_mentor' => $this->jabatan_mentor,
+                'id_users' => $this->id_users,
+                'id_unit_kerja' => $this->id_unit_kerja,
                 'updated_at' => now(),
             ]);
 
             $this->dispatch('showAlert', [
                 'type' => 'success',
-                'message' => 'Data berhasil diupdate!'
+                'message' => 'Data mentor berhasilタリアップデート!'
             ]);
             $this->resetForm();
             $this->loadData();
@@ -230,7 +264,7 @@ class UnitKerja extends Component
         } catch (ValidationException $e) {
             $this->dispatch('showAlert', [
                 'type' => 'error',
-                'message' => $e->errors()['nama_unit_kerja'][0]
+                'message' => $e->errors()['nama_mentor'][0] ?? $e->errors()['jabatan_mentor'][0] ?? 'Validasi gagal.'
             ]);
         } catch (\Throwable $th) {
             $this->dispatch('showAlert', [
@@ -243,8 +277,8 @@ class UnitKerja extends Component
     public function delete($id)
     {
         try {
-            UnitKerjaModel::where('id_unit_kerja', $id)->update(['deleted_at' => now()]);
-            session()->flash('message', 'Data berhasil dihapus');
+            Mentor::where('id_mentor', $id)->update(['deleted_at' => now()]);
+            session()->flash('message', 'Data mentor berhasil dihapus');
             $this->loadData();
         } catch (\Throwable $th) {
             session()->flash('error', 'Gagal menghapus data: ' . $th->getMessage());
@@ -253,10 +287,12 @@ class UnitKerja extends Component
 
     public function resetForm()
     {
-        $this->nama_unit_kerja = '';
+        $this->nama_mentor = '';
+        $this->jabatan_mentor = '';
+        $this->id_users = null;
+        $this->id_unit_kerja = null;
         $this->edit_id = null;
         $this->is_edit_mode = false;
-        // $this->resetErrorBag();
     }
 
     protected function validateRequest(Request $request, array $rules)
@@ -270,6 +306,6 @@ class UnitKerja extends Component
 
     public function render()
     {
-        return view('livewire.unit-kerja')->extends('layout.layouts');
+        return view('livewire.mentor')->extends('layout.layouts');
     }
 }

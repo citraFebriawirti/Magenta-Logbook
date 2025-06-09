@@ -1,7 +1,9 @@
 <?php
 
+use App\Livewire\Mentors;
 use App\Livewire\Dashboard;
 use App\Livewire\UnitKerja;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +27,4 @@ Route::middleware(['auth', 'verified'])->group(function () {});
 
 Route::get('/dashboard', Dashboard::class)->name('dashboard');
 Route::get('/unit-kerja', UnitKerja::class)->name('unit-kerja');
+Route::get('/mentor', Mentors::class)->name('mentor');

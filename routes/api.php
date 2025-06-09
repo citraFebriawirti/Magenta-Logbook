@@ -17,3 +17,21 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+use App\Livewire\UnitKerja;
+use App\Models\Mentor;
+
+Route::prefix('unit_kerja')->group(function () {
+    Route::post('/store', [UnitKerja::class, 'apiStore'])->name('api.unit_kerja.store');
+    Route::get('/getAll', [UnitKerja::class, 'apiGetAll'])->name('api.unit_kerja.getAll');
+    Route::get('/edit/{id}', [UnitKerja::class, 'apiEdit'])->name('api.unit_kerja.edit');
+    Route::put('/update/{id}', [UnitKerja::class, 'apiUpdate'])->name('api.unit_kerja.update');
+    Route::delete('/delete/{id}', [UnitKerja::class, 'apiDelete'])->name('api.unit_kerja.delete');
+});
+Route::prefix('mentor')->group(function () {
+    Route::post('/store', [Mentor::class, 'apiStore'])->name('api.mentor.store');
+    Route::get('/getAll', [Mentor::class, 'apiGetAll'])->name('api.mentor.getAll');
+    Route::get('/edit/{id}', [Mentor::class, 'apiGetById'])->name('api.mentor.edit');
+    Route::put('/update/{id}', [Mentor::class, 'apiUpdate'])->name('api.mentor.update');
+    Route::delete('/delete/{id}', [Mentor::class, 'apiDelete'])->name('api.mentor.delete');
+});
