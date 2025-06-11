@@ -20,10 +20,32 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
         'password',
-        'role'
+        'role',
+
     ];
+
+
+    // public function admin()
+    // {
+    //     return $this->hasOne(Admin::class);
+    // }
+
+    public function mentor()
+    {
+        return $this->hasOne(Mentor::class);
+    }
+
+    public function peserta()
+    {
+        return $this->hasOne(Peserta::class);
+    }
+
+    public function getAuthIdentifierName()
+    {
+        return 'username';
+    }
 
     /**
      * The attributes that should be hidden for serialization.

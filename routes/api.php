@@ -19,7 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 use App\Livewire\UnitKerja;
-use App\Models\Mentor;
+use App\Livewire\Mentors;
+
+use App\Livewire\Kegiatans;
+
+
 
 Route::prefix('unit_kerja')->group(function () {
     Route::post('/store', [UnitKerja::class, 'apiStore'])->name('api.unit_kerja.store');
@@ -29,9 +33,18 @@ Route::prefix('unit_kerja')->group(function () {
     Route::delete('/delete/{id}', [UnitKerja::class, 'apiDelete'])->name('api.unit_kerja.delete');
 });
 Route::prefix('mentor')->group(function () {
-    Route::post('/store', [Mentor::class, 'apiStore'])->name('api.mentor.store');
-    Route::get('/getAll', [Mentor::class, 'apiGetAll'])->name('api.mentor.getAll');
-    Route::get('/edit/{id}', [Mentor::class, 'apiGetById'])->name('api.mentor.edit');
-    Route::put('/update/{id}', [Mentor::class, 'apiUpdate'])->name('api.mentor.update');
-    Route::delete('/delete/{id}', [Mentor::class, 'apiDelete'])->name('api.mentor.delete');
+    Route::post('/store', [Mentors::class, 'apiStore'])->name('api.mentor.store');
+    Route::get('/getAll', [Mentors::class, 'apiGetAll'])->name('api.mentor.getAll');
+    Route::get('/edit/{id}', [Mentors::class, 'apiGetById'])->name('api.mentor.edit');
+    Route::put('/update/{id}', [Mentors::class, 'apiUpdate'])->name('api.mentor.update');
+    Route::delete('/delete/{id}', [Mentors::class, 'apiDelete'])->name('api.mentor.delete');
+});
+
+
+Route::prefix('kegiatan')->group(function () {
+    Route::post('/store', [Kegiatans::class, 'apiStore'])->name('api.kegiatan.store');
+    Route::get('/getAll', [Kegiatans::class, 'apiGetAll'])->name('api.kegiatan.getAll');
+    Route::get('/edit/{id}', [Kegiatans::class, 'apiGetById'])->name('api.kegiatan.edit');
+    Route::put('/update/{id}', [Kegiatans::class, 'apiUpdate'])->name('api.kegiatan.update');
+    Route::delete('/delete/{id}', [Kegiatans::class, 'apiDelete'])->name('api.kegiatan.delete');
 });

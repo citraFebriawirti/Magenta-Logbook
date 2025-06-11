@@ -5,8 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Mentor;
-use App\Models\UnitKerjaModel;
-use App\Models\User;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
@@ -146,6 +145,7 @@ class Mentors extends Component
         }
     }
 
+
     public function apiGetById($id)
     {
         try {
@@ -256,7 +256,7 @@ class Mentors extends Component
 
             $this->dispatch('showAlert', [
                 'type' => 'success',
-                'message' => 'Data mentor berhasilタリアップデート!'
+                'message' => 'Data mentor berhasil Diupdate!'
             ]);
             $this->resetForm();
             $this->loadData();

@@ -1,6 +1,4 @@
 ### Get All Unit Kerja
-GET http://localhost:8000/api/mentor/getAll
-Accept: application/json
 
 ###
 GET http://localhost:8000/api/unit_kerja/getAll
@@ -15,7 +13,7 @@ Accept: application/json
   "nama_unit_kerja": "Test Doang"
 }
 
-###
+
 
 ### Edit Unit Kerja (Ganti :id sesuai data yang ada)
 GET http://localhost:8000/api/unit_kerja/edit/1
@@ -37,3 +35,28 @@ Accept: application/json
 ### Delete Unit Kerja (Ganti :id sesuai data yang ada)
 DELETE http://localhost:8000/api/unit_kerja/delete/1
 Accept: application/json
+
+
+
+
+## Get All Mentor
+
+###
+GET http://localhost:8000/api/mentor/getAll
+Accept: application/json
+
+
+
+###
+
+### Delete Unit Kerja (Ganti :id sesuai data yang ada)
+DELETE http://localhost:8000/api/mentor/delete/4
+Accept: application/json
+
+
+## Get All Kegaiatan
+
+###
+GET http://localhost:8000/api/kegiatan/getAll
+Accept: application/json
+

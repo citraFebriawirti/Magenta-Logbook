@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('peserta', function (Blueprint $table) {
+        Schema::create('tb_peserta', function (Blueprint $table) {
             $table->id('id_peserta');
             $table->integer('id_user')->nullable();
             $table->integer('id_unit_kerja')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('peserta');
+        Schema::dropIfExists('tb_peserta');
     }
 };

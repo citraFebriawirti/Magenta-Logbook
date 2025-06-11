@@ -37,7 +37,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="id_users" class="form-label">Pengguna (Opsional)</label>
                                 <select class="form-control @error('id_users') is-invalid @enderror" id="id_users" wire:model.defer="id_users">
                                     <option value="">Pilih Pengguna</option>
@@ -48,7 +48,7 @@
                                 @error('id_users')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="mb-3">
                                 <label for="id_unit_kerja" class="form-label">Unit Kerja (Opsional)</label>
                                 <select class="form-control @error('id_unit_kerja') is-invalid @enderror" id="id_unit_kerja" wire:model.defer="id_unit_kerja">
@@ -95,7 +95,7 @@
                                 <th>Nama Mentor</th>
                                 <th>Jabatan Mentor</th>
                                 <th>Unit Kerja</th>
-                                <th>Pengguna</th>
+                                {{-- <th>Pengguna</th> --}}
                                 <th class="text-center" style="width: 20%">Aksi</th>
                             </tr>
                         </thead>
@@ -106,7 +106,7 @@
                                     <td>{{ $mentor->nama_mentor }}</td>
                                     <td>{{ $mentor->jabatan_mentor }}</td>
                                     <td>{{ $mentor->unitKerja ? $mentor->unitKerja->nama_unit_kerja : '-' }}</td>
-                                    <td>{{ $mentor->user ? $mentor->user->name : '-' }}</td>
+                                    {{-- <td>{{ $mentor->user ? $mentor->user->name : '-' }}</td> --}}
                                     <td class="text-center">
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-sm btn-warning mr-2" wire:click="edit({{ $mentor->id_mentor }})" type="button" data-toggle="modal" data-target="#mentorModal">
